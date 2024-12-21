@@ -21,7 +21,7 @@ The system will calculate the **Cosine Similarity** between the user's game and 
 
 ## Live Demo
 
-You can try the application [here](https://sergjsilva.github.io/lottery-data/lottery-results.json).
+You can try the application [here](https://sj-silva.github.io/mega-sena-consulta/).
 
 ## Technologies Used
 
