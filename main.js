@@ -137,10 +137,6 @@ function compareNumbers() {
   tableResult.style.display = "block";
   userNumbers.sort((a, b) => a - b);
 
-  //document.querySelector(
-  // ".game-table-title"
-  //).textContent = `Seu jogo: ${userNumbers.join("-")}`;
-
   const similarityPercentage = cosineSimilarity(userNumbers, lastMegaGame);
   document.querySelector(
     ".game-table-title"
@@ -258,17 +254,13 @@ function calcModulo(vector) {
 }
 
 function cosineSimilarity(gameA, gameB) {
-  // Calculando o produto interno
   let dotProduct = calcDotProduct(gameA, gameB);
 
-  // Calculando os módulos (normas) dos vetores
   let moduloA = calcModulo(gameA);
   let moduloB = calcModulo(gameB);
 
-  // Calculando a similaridade do cosseno
   let similarity = dotProduct / (moduloA * moduloB);
 
-  // Convertendo para porcentagem
   return similarity * 100;
 }
 
