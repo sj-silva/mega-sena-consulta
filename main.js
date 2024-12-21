@@ -1,9 +1,50 @@
+let data = null;
+let lastMegaGame = [];
 let userNumbers = [];
 let fourMatches = [];
 let fiveMatches = [];
 let sixMatches = [];
 
 const maxNumbers = 15;
+
+async function fetchLastResult() {
+  data = await getDatabase();
+
+  // Extract the last result
+  const lastResult = data.allResults[data.allResults.length - 1];
+  lastMegaGame = [
+    lastResult.Bola1,
+    lastResult.Bola2,
+    lastResult.Bola3,
+    lastResult.Bola4,
+    lastResult.Bola5,
+    lastResult.Bola6,
+  ];
+  // Update HTML elements with the last result
+  document.getElementById("concurso").textContent = lastResult.Concurso;
+  document.getElementById("date").textContent = formatDateToPortuguese(
+    lastResult["Data do Sorteio"]
+  );
+  document.getElementById("bola1").textContent = lastResult.Bola1;
+  document.getElementById("bola2").textContent = lastResult.Bola2;
+  document.getElementById("bola3").textContent = lastResult.Bola3;
+  document.getElementById("bola4").textContent = lastResult.Bola4;
+  document.getElementById("bola5").textContent = lastResult.Bola5;
+  document.getElementById("bola6").textContent = lastResult.Bola6;
+  document.getElementById("lastConcurso").textContent = lastResult.Concurso;
+
+  const winnersElement = document.getElementById("winners");
+  winnersElement.textContent = lastResult["Ganhadores 6 acertos"];
+
+  if (lastResult["Ganhadores 6 acertos"] === 0) {
+    const acumulouMessage = document.createElement("span");
+    acumulouMessage.textContent = " Acumulou!!";
+    acumulouMessage.style.fontSize = "1.5em"; // Aumenta o tamanho da fonte
+    acumulouMessage.style.color = "red"; // Define a cor como vermelho
+    acumulouMessage.style.fontWeight = "bold"; // Deixa o texto em negrito
+    winnersElement.appendChild(acumulouMessage);
+  }
+}
 
 function createNumberBoard() {
   const board = document.getElementById("numberBoard");
@@ -86,77 +127,153 @@ function showToast(title, message) {
   toast.show();
 }
 
-async function compareNumbers() {
+function compareNumbers() {
   if (userNumbers.length < 6) {
     showToast("Erro", "Jogo deve possuir ao menos 6 dezenas");
-  } else {
-    const response = await fetch(
-      "https://sergjsilva.github.io/lottery-data/lottery-results.json"
-    );
-    const data = await response.json();
-    const matches = { 6: 0, 5: 0, 4: 0, 3: 0, 2: 0, 1: 0, 0: 0 };
-    const tableResult = document.querySelector(".table-section");
-    tableResult.style.display = "block";
-    userNumbers.sort((a, b) => a - b);
-    document.querySelector(
-      ".game-table-title"
-    ).textContent = `Seu jogo: ${userNumbers.join("-")}`;
-
-    fourMatches = [];
-    fiveMatches = [];
-    sixMatches = [];
-
-    data.allResults.forEach((game) => {
-      const currentGame = [
-        game.Bola1,
-        game.Bola2,
-        game.Bola3,
-        game.Bola4,
-        game.Bola5,
-        game.Bola6,
-      ];
-
-      const matchCount = userNumbers.filter((number) =>
-        currentGame.includes(number)
-      ).length;
-      matches[matchCount]++;
-      if (matchCount === 4 || matchCount === 5 || matchCount === 6) {
-        const gameDetails = {
-          concurso: game["Concurso"],
-          dataDoSorteio: game["Data do Sorteio"],
-          drawnNumbers: currentGame,
-        };
-
-        if (matchCount === 4) {
-          fourMatches.push(gameDetails);
-        } else if (matchCount === 5) {
-          fiveMatches.push(gameDetails);
-        } else if (matchCount === 6) {
-          sixMatches.push(gameDetails);
-        }
-      }
-    });
-
-    const tableBody = document.getElementById("matchesTableBody");
-    tableBody.innerHTML = Object.entries(matches)
-      .map(([match, freq]) => `<tr><td>${match}</td><td>${freq}</td></tr>`)
-      .join("");
-    // Scroll to the table section
-    tableResult.scrollIntoView({
-      behavior: "smooth", // For smooth scrolling
-      block: "start", // Aligns the section to the start of the viewport
-    });
-
-    // Call the function to populate Nav Tabs Section
-    populateMatchesTable(fourMatches, "fourMatchesTableBody");
-    populateMatchesTable(fiveMatches, "fiveMatchesTableBody");
-    populateMatchesTable(sixMatches, "sixMatchesTableBody");
-
-    document.querySelector(".nav-tab-section").style.display = "block";
   }
+
+  const matches = { 6: 0, 5: 0, 4: 0, 3: 0, 2: 0, 1: 0, 0: 0 };
+  const tableResult = document.querySelector(".table-section");
+  tableResult.style.display = "block";
+  userNumbers.sort((a, b) => a - b);
+
+  //document.querySelector(
+  // ".game-table-title"
+  //).textContent = `Seu jogo: ${userNumbers.join("-")}`;
+
+  const similarityPercentage = cosineSimilarity(userNumbers, lastMegaGame);
+  document.querySelector(
+    ".game-table-title"
+  ).textContent = `Seu jogo: ${userNumbers.join(
+    "-"
+  )} | Similaridade com o último sorteio: ${similarityPercentage.toFixed(2)}%`;
+
+  fourMatches = [];
+  fiveMatches = [];
+  sixMatches = [];
+
+  data.allResults.forEach((game) => {
+    const currentGame = [
+      game.Bola1,
+      game.Bola2,
+      game.Bola3,
+      game.Bola4,
+      game.Bola5,
+      game.Bola6,
+    ];
+
+    const matchCount = userNumbers.filter((number) =>
+      currentGame.includes(number)
+    ).length;
+    matches[matchCount]++;
+    if (matchCount === 4 || matchCount === 5 || matchCount === 6) {
+      const gameDetails = {
+        concurso: game["Concurso"],
+        dataDoSorteio: game["Data do Sorteio"],
+        drawnNumbers: currentGame,
+      };
+
+      if (matchCount === 4) {
+        fourMatches.push(gameDetails);
+      } else if (matchCount === 5) {
+        fiveMatches.push(gameDetails);
+      } else if (matchCount === 6) {
+        sixMatches.push(gameDetails);
+      }
+    }
+  });
+
+  const tableBody = document.getElementById("matchesTableBody");
+  tableBody.innerHTML = Object.entries(matches)
+    .map(([match, freq]) => `<tr><td>${match}</td><td>${freq}</td></tr>`)
+    .join("");
+  // Scroll to the table section
+  tableResult.scrollIntoView({
+    behavior: "smooth", // For smooth scrolling
+    block: "start", // Aligns the section to the start of the viewport
+  });
+
+  // Call the function to populate Nav Tabs Section
+  populateMatchesTable(fourMatches, "fourMatchesTableBody");
+  populateMatchesTable(fiveMatches, "fiveMatchesTableBody");
+  populateMatchesTable(sixMatches, "sixMatchesTableBody");
+
+  document.querySelector(".nav-tab-section").style.display = "block";
+}
+
+function formatDateToPortuguese(dateString) {
+  // Split the dateString (DD/MM/YYYY) to extract day, month, and year
+  const [day, month, year] = dateString.split("/");
+
+  // Create a new Date object using the extracted values
+  const date = new Date(`${year}-${month}-${day}`);
+
+  // Format the date to the desired string in Portuguese
+  const formattedDate = date.toLocaleDateString("pt-BR", {
+    weekday: "long", // Full name of the day (e.g., "Sábado")
+    day: "numeric", // Numeric day (e.g., "28")
+    month: "long", // Full name of the month (e.g., "Setembro")
+    year: "numeric", // Full year (e.g., "2024")
+  });
+
+  // Capitalize the first letter of the weekday
+  return formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+}
+
+async function getDatabase() {
+  try {
+    // Define the path to the JSON file in the 'database' folder
+    const dataPath = "./database/lottery-results.json";
+
+    // Fetch the file
+    const response = await fetch(dataPath);
+
+    // Check if the fetch was successful
+    if (!response.ok) {
+      throw new Error(`Failed to fetch database: ${response.statusText}`);
+    }
+
+    // Parse and return the JSON content
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching the database file:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
+}
+
+function calcDotProduct(gameA, gameB) {
+  let result = 0;
+  for (let i = 0; i < gameA.length; i++) {
+    result += gameA[i] * gameB[i];
+  }
+  return result;
+}
+
+function calcModulo(vector) {
+  let sumSquares = 0;
+  for (let i = 0; i < vector.length; i++) {
+    sumSquares += vector[i] * vector[i];
+  }
+  return Math.sqrt(sumSquares);
+}
+
+function cosineSimilarity(gameA, gameB) {
+  // Calculando o produto interno
+  let dotProduct = calcDotProduct(gameA, gameB);
+
+  // Calculando os módulos (normas) dos vetores
+  let moduloA = calcModulo(gameA);
+  let moduloB = calcModulo(gameB);
+
+  // Calculando a similaridade do cosseno
+  let similarity = dotProduct / (moduloA * moduloB);
+
+  // Convertendo para porcentagem
+  return similarity * 100;
 }
 
 document.getElementById("playButton").onclick = compareNumbers;
 document.getElementById("resetButton").onclick = resetBoard;
 
+fetchLastResult();
 createNumberBoard();

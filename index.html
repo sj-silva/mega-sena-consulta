@@ -31,6 +31,28 @@
     <div class="container text-center">
       <h1>Consulta Histórica</h1>
       <p>Compare sua aposta com os resultados históricos da Mega-Sena</p>
+      <div id="last-result" class="card mt-3">
+        <h4 class="card-title">Concurso: <span id="concurso"></span></h4>
+        <h5 class="card-text">Data: <span id="date"></span></h5>
+        <h6 class="card-text">
+          Números Sorteados:
+          <div class="number-container">
+            <span id="bola1" class="badge bg-primary"></span>
+            <span id="bola2" class="badge bg-primary"></span>
+            <span id="bola3" class="badge bg-primary"></span>
+            <span id="bola4" class="badge bg-primary"></span>
+            <span id="bola5" class="badge bg-primary"></span>
+            <span id="bola6" class="badge bg-primary"></span>
+          </div>
+        </h6>
+        <h6 class="card-text">
+          Total de acertadores dos 6 números: <span id="winners"></span>
+        </h6>
+        <p class="card-text mt-3 text-success">
+          O banco de dados está atualizado até o Concurso
+          <span id="lastConcurso"></span>.
+        </p>
+      </div>
       <p class="user-message">
         Escolha até 15 números no cartão abaixo para formar sua aposta da
         Mega-Sena
