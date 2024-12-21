@@ -1,0 +1,38 @@
+body {
+  padding-top: 90px;
+}
+.navbar {
+  background-color: #1a3d5b; /* Verde baseado no logo */
+}
+.navbar a.navbar-brand {
+  font-weight: bold;
+  color: #ffffff;
+}
+.number-board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.number-board button {
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s, color 0.3s;
+}
+.number-board button:hover {
+  background-color: #e6e6e6;
+}
+.number-board button.selected {
+  background-color: #007bff;
+  color: white;
+}
+.user-message {
+  color: #007bff;
+  font-weight: bold;
+  margin-bottom: 20px;
+}

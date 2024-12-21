@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consulta Mega-Sena</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#"
+          ><img
+            src="images/mega-sena-logo.png"
+            alt="mega-sena-logo"
+            width="120"
+          />
+          Mega-Sena</a
+        >
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="container text-center">
+      <h1>Consulta Histórica</h1>
+      <p>Compare sua aposta com os resultados históricos da Mega-Sena</p>
+      <p class="user-message">
+        Escolha até 15 números no cartão abaixo para formar sua aposta da
+        Mega-Sena
+      </p>
+    </div>
+
+    <!-- Number Board -->
+    <div class="container text-center">
+      <div id="numberBoard" class="number-board"></div>
+      <button id="playButton" class="btn btn-primary mt-3">Jogar</button>
+      <button id="resetButton" class="btn btn-secondary mt-3">Limpar</button>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+      <div
+        id="alertToast"
+        class="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="toast-header">
+          <strong class="me-auto" id="toastTitle"></strong>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="toast-body" id="toastMessage"></div>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <section class="table-section mb-5 py-3" style="display: none">
+      <div class="container mt-5">
+        <h3 class="text-center game-table-title"></h3>
+        <table class="table table-bordered text-center">
+          <thead class="thead-light">
+            <tr>
+              <th>Acertos</th>
+              <th>Frequência</th>
+            </tr>
+          </thead>
+          <tbody id="matchesTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Nav Tabs Section -->
+    <section class="nav-tab-section mb-5 mt-2" style="display: none">
+      <div class="container mt-3">
+        <ul class="nav nav-tabs" id="matchTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="four-matches-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#four-matches"
+              type="button"
+              role="tab"
+            >
+              4 Acertos
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="five-matches-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#five-matches"
+              type="button"
+              role="tab"
+            >
+              5 Acertos
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="six-matches-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#six-matches"
+              type="button"
+              role="tab"
+            >
+              6 Acertos
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content" id="matchTabsContent">
+          <!-- 4 Matches Tab -->
+          <div
+            class="tab-pane fade show active"
+            id="four-matches"
+            role="tabpanel"
+          >
+            <table class="table table-bordered mt-3">
+              <thead class="table-primary">
+                <tr>
+                  <th scope="col">Concurso</th>
+                  <th scope="col">Data</th>
+                  <th scope="col">Números Sorteados</th>
+                </tr>
+              </thead>
+              <tbody id="fourMatchesTableBody"></tbody>
+            </table>
+          </div>
+
+          <!-- 5 Matches Tab -->
+          <div class="tab-pane fade" id="five-matches" role="tabpanel">
+            <table class="table table-bordered mt-3">
+              <thead class="table-primary">
+                <tr>
+                  <th scope="col">Concurso</th>
+                  <th scope="col">Data</th>
+                  <th scope="col">Números Sorteados</th>
+                </tr>
+              </thead>
+              <tbody id="fiveMatchesTableBody"></tbody>
+            </table>
+          </div>
+
+          <!-- 6 Matches Tab -->
+          <div class="tab-pane fade" id="six-matches" role="tabpanel">
+            <table class="table table-bordered mt-3">
+              <thead class="table-primary">
+                <tr>
+                  <th scope="col">Concurso</th>
+                  <th scope="col">Data</th>
+                  <th scope="col">Números Sorteados</th>
+                </tr>
+              </thead>
+              <tbody id="sixMatchesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scripts -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    <script src="main.js"></script>
+  </body>
+</html>
