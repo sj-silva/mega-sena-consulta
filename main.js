@@ -137,12 +137,9 @@ function compareNumbers() {
   tableResult.style.display = "block";
   userNumbers.sort((a, b) => a - b);
 
-  const similarityPercentage = cosineSimilarity(userNumbers, lastMegaGame);
   document.querySelector(
     ".game-table-title"
-  ).textContent = `Seu jogo: ${userNumbers.join(
-    "-"
-  )} | Similaridade com o último sorteio: ${similarityPercentage.toFixed(2)}%`;
+  ).textContent = `Seu jogo: ${userNumbers.join("-")}`;
 
   fourMatches = [];
   fiveMatches = [];
@@ -235,33 +232,6 @@ async function getDatabase() {
     console.error("Error fetching the database file:", error);
     throw error; // Re-throw the error for the caller to handle
   }
-}
-
-function calcDotProduct(gameA, gameB) {
-  let result = 0;
-  for (let i = 0; i < gameA.length; i++) {
-    result += gameA[i] * gameB[i];
-  }
-  return result;
-}
-
-function calcModulo(vector) {
-  let sumSquares = 0;
-  for (let i = 0; i < vector.length; i++) {
-    sumSquares += vector[i] * vector[i];
-  }
-  return Math.sqrt(sumSquares);
-}
-
-function cosineSimilarity(gameA, gameB) {
-  let dotProduct = calcDotProduct(gameA, gameB);
-
-  let moduloA = calcModulo(gameA);
-  let moduloB = calcModulo(gameB);
-
-  let similarity = dotProduct / (moduloA * moduloB);
-
-  return similarity * 100;
 }
 
 document.getElementById("playButton").onclick = compareNumbers;
