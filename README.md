@@ -26,5 +26,5 @@ You can try the application [here](https://sj-silva.github.io/mega-sena-consulta
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/sergjsilva/consulta-mega-sena.git
+   git clone https://github.com/sj-silva/consulta-mega-sena.git
    ```
