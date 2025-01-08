@@ -129,52 +129,52 @@ function showToast(title, message) {
 
 function compareNumbers() {
   if (userNumbers.length < 6) {
-    showToast("Erro", "Jogo deve possuir ao menos 6 dezenas");
-  }
+    showToast("Erro", "O jogo seu deve possuir ao menos 6 dezenas");
+  } else {
+    const matches = { 6: 0, 5: 0, 4: 0, 3: 0, 2: 0, 1: 0, 0: 0 };
+    const tableResult = document.querySelector(".table-section");
+    tableResult.style.display = "block";
+    userNumbers.sort((a, b) => a - b);
 
-  const matches = { 6: 0, 5: 0, 4: 0, 3: 0, 2: 0, 1: 0, 0: 0 };
-  const tableResult = document.querySelector(".table-section");
-  tableResult.style.display = "block";
-  userNumbers.sort((a, b) => a - b);
+    document.querySelector(
+      ".game-table-title"
+    ).textContent = `Seu jogo: ${userNumbers.join("-")}`;
 
-  document.querySelector(
-    ".game-table-title"
-  ).textContent = `Seu jogo: ${userNumbers.join("-")}`;
+    fourMatches = [];
+    fiveMatches = [];
+    sixMatches = [];
 
-  fourMatches = [];
-  fiveMatches = [];
-  sixMatches = [];
+    data.allResults.forEach((game) => {
+      const currentGame = [
+        game.Bola1,
+        game.Bola2,
+        game.Bola3,
+        game.Bola4,
+        game.Bola5,
+        game.Bola6,
+      ];
 
-  data.allResults.forEach((game) => {
-    const currentGame = [
-      game.Bola1,
-      game.Bola2,
-      game.Bola3,
-      game.Bola4,
-      game.Bola5,
-      game.Bola6,
-    ];
+      const matchCount = userNumbers.filter((number) =>
+        currentGame.includes(number)
+      ).length;
+      matches[matchCount]++;
+      if (matchCount === 4 || matchCount === 5 || matchCount === 6) {
+        const gameDetails = {
+          concurso: game["Concurso"],
+          dataDoSorteio: game["Data do Sorteio"],
+          drawnNumbers: currentGame,
+        };
 
-    const matchCount = userNumbers.filter((number) =>
-      currentGame.includes(number)
-    ).length;
-    matches[matchCount]++;
-    if (matchCount === 4 || matchCount === 5 || matchCount === 6) {
-      const gameDetails = {
-        concurso: game["Concurso"],
-        dataDoSorteio: game["Data do Sorteio"],
-        drawnNumbers: currentGame,
-      };
-
-      if (matchCount === 4) {
-        fourMatches.push(gameDetails);
-      } else if (matchCount === 5) {
-        fiveMatches.push(gameDetails);
-      } else if (matchCount === 6) {
-        sixMatches.push(gameDetails);
+        if (matchCount === 4) {
+          fourMatches.push(gameDetails);
+        } else if (matchCount === 5) {
+          fiveMatches.push(gameDetails);
+        } else if (matchCount === 6) {
+          sixMatches.push(gameDetails);
+        }
       }
-    }
-  });
+    });
+  }
 
   const tableBody = document.getElementById("matchesTableBody");
   tableBody.innerHTML = Object.entries(matches)
