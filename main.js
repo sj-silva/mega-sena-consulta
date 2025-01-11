@@ -181,6 +181,7 @@ function compareNumbers() {
       .join("");
     // Scroll to the table section
     const navTabSection = document.querySelector(".nav-tab-section");
+    navTabSection.style.display = "block";
     navTabSection.scrollIntoView({
       behavior: "smooth", // For smooth scrolling
       block: "start", // Aligns the section to the start of the viewport
