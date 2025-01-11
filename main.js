@@ -174,24 +174,25 @@ function compareNumbers() {
         }
       }
     });
+
+    const tableBody = document.getElementById("matchesTableBody");
+    tableBody.innerHTML = Object.entries(matches)
+      .map(([match, freq]) => `<tr><td>${match}</td><td>${freq}</td></tr>`)
+      .join("");
+    // Scroll to the table section
+    const navTabSection = document.querySelector(".nav-tab-section");
+    navTabSection.scrollIntoView({
+      behavior: "smooth", // For smooth scrolling
+      block: "start", // Aligns the section to the start of the viewport
+    });
+
+    // Call the function to populate Nav Tabs Section
+    populateMatchesTable(fourMatches, "fourMatchesTableBody");
+    populateMatchesTable(fiveMatches, "fiveMatchesTableBody");
+    populateMatchesTable(sixMatches, "sixMatchesTableBody");
+
+    document.querySelector(".nav-tab-section").style.display = "block";
   }
-
-  const tableBody = document.getElementById("matchesTableBody");
-  tableBody.innerHTML = Object.entries(matches)
-    .map(([match, freq]) => `<tr><td>${match}</td><td>${freq}</td></tr>`)
-    .join("");
-  // Scroll to the table section
-  tableResult.scrollIntoView({
-    behavior: "smooth", // For smooth scrolling
-    block: "start", // Aligns the section to the start of the viewport
-  });
-
-  // Call the function to populate Nav Tabs Section
-  populateMatchesTable(fourMatches, "fourMatchesTableBody");
-  populateMatchesTable(fiveMatches, "fiveMatchesTableBody");
-  populateMatchesTable(sixMatches, "sixMatchesTableBody");
-
-  document.querySelector(".nav-tab-section").style.display = "block";
 }
 
 function formatDateToPortuguese(dateString) {
